@@ -20,7 +20,8 @@ defmodule FlatSearch.MixProject do
   def application do
     [
       mod: {FlatSearch.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
+      applications: [:httpotion]
     ]
   end
 
@@ -38,7 +39,7 @@ defmodule FlatSearch.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.15.1"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.30.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
@@ -46,7 +47,9 @@ defmodule FlatSearch.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:crawly, "~> 0.13.0"},
+      {:httpotion, "~> 3.1.0"}
     ]
   end
 
