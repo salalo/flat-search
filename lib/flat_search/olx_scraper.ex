@@ -71,6 +71,12 @@ defmodule OlxScraper do
       |> String.split(" m")
       |> Enum.at(0)
       |> str_to_num()
+
+    # In form of a list
+    photo_links =
+      document
+      |> Floki.find(".swiper-slide .swiper-zoom-container img")
+      |> Floki.attribute("data-src")
   end
 
   defp str_to_num(num) do
