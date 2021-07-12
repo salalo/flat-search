@@ -13,7 +13,7 @@ defmodule FlatSearch.Flats.Flat do
     field :additional_price, :integer
     field :negotiation, :boolean, default: false
     field :surface, :integer
-    field :description, {:array, :string}
+    # field :description, {:array, :string}
     field :favourite, :boolean
     field :state, :string
     field :photo_links, {:array, :string}
@@ -24,22 +24,31 @@ defmodule FlatSearch.Flats.Flat do
       flat
       |> cast(attrs, [
         :title,
-        :link,
         :price,
+        :link,
         :additional_price,
         :negotiation,
         :surface,
-        :description,
+        # :description,
         :photo_links
       ])
       |> validate_required([
-        # :unique_id,
         :title,
-        :link,
         :price,
+        :link,
         :photo_links
       ])
-      |> unique_constraint([:unique_id, :link])
+      |> put_link_hash()
+    end
+
+    defp put_link_hash(changeset) do
+      case changeset do
+        %Ecto.Changeset{valid?: true, changes: %{link: link}} ->
+          put_change(changeset, :unique_id, :crypto.hash(:md5, link) |> Base.encode16())
+
+        _ ->
+          changeset
+      end
     end
   end
 end

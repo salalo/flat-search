@@ -1,5 +1,6 @@
 defmodule OlxScraper do
   use Crawly.Spider
+  alias FlatSearch.Flats
 
   @impl Crawly.Spider
   def base_url(), do: "https://www.olx.pl"
@@ -77,6 +78,19 @@ defmodule OlxScraper do
       document
       |> Floki.find(".swiper-slide .swiper-zoom-container img")
       |> Floki.attribute("data-src")
+
+    flat_record = %{
+      price: price,
+      additional_price: additional_price,
+      title: title,
+      # description: description,
+      negotiation: negotiable?,
+      surface: surface,
+      photo_links: photo_links,
+      link: url
+    }
+
+    Flats.create_flat(flat_record)
   end
 
   defp str_to_num(num) do

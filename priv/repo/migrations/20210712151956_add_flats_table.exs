@@ -1,8 +1,8 @@
-defmodule FlatSearch.Repo.Migrations.AddFlatRecordTable do
+defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
   use Ecto.Migration
 
   def change do
-    create table("flat_record") do
+    create table("flats") do
       add :unique_id, :string
       add :title, :string
       add :link, :string
@@ -10,12 +10,12 @@ defmodule FlatSearch.Repo.Migrations.AddFlatRecordTable do
       add :additional_price, :integer
       add :negotiation, :boolean
       add :surface, :integer
-      add :description, {:array, :string}
+      # add :description, {:array, :text}
       add :favourite, :boolean
       add :state, :string
       add :photo_links, {:array, :string}
 
-      timestamps
+      timestamps()
     end
   end
 end
