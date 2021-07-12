@@ -11,7 +11,7 @@ defmodule FlatSearch.Flats.Flat do
     field :link, :string
     field :price, :integer
     field :additional_price, :integer
-    field :negotiation, :boolean
+    field :negotiation, :boolean, default: false
     field :surface, :integer
     field :description, {:array, :string}
     field :favourite, :boolean
@@ -19,5 +19,27 @@ defmodule FlatSearch.Flats.Flat do
     field :photo_links, {:array, :string}
 
     timestamps()
+
+    def changeset(flat, attrs) do
+      flat
+      |> cast(attrs, [
+        :title,
+        :link,
+        :price,
+        :additional_price,
+        :negotiation,
+        :surface,
+        :description,
+        :photo_links
+      ])
+      |> validate_required([
+        # :unique_id,
+        :title,
+        :link,
+        :price,
+        :photo_links
+      ])
+      |> unique_constraint([:unique_id, :link])
+    end
   end
 end
