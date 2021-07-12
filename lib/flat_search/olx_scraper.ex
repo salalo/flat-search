@@ -62,11 +62,15 @@ defmodule OlxScraper do
       |> Enum.at(-1)
       |> elem(2)
 
-    IO.inspect(description)
-    # IO.inspect(negotiable?)
-    # IO.inspect(price)
-    # IO.inspect(title)
-    # IO.inspect(additional_price)
+    surface =
+      document
+      |> Floki.find("p:fl-contains('Powierzchnia')")
+      |> get_nested_element()
+      |> String.split(": ")
+      |> Enum.at(1)
+      |> String.split(" m")
+      |> Enum.at(0)
+      |> str_to_num()
   end
 
   defp str_to_num(num) do
