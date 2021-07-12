@@ -32,6 +32,19 @@ defmodule OlxScraper do
       |> Enum.at(0)
       |> elem(2)
       |> Enum.at(0)
+      |> str_to_num()
+
+    additional_price =
+      document
+      |> Floki.find("ul li p:fl-contains('Czynsz')")
+      |> Enum.at(0)
+      |> elem(2)
+      |> Enum.at(0)
+      |> String.split(": ")
+      |> Enum.at(1)
+      |> String.split(" zł")
+      |> Enum.at(0)
+      |> str_to_num()
 
     title =
       document
@@ -41,6 +54,21 @@ defmodule OlxScraper do
       |> Enum.at(0)
 
     IO.inspect(price)
-    IO.inspect(title)
+    # IO.inspect(title)
+    IO.inspect(additional_price)
+  end
+
+  defp str_to_num(num) do
+    case String.contains?(num, " ") do
+      false ->
+        num |> Integer.parse() |> elem(0)
+
+      true ->
+        num
+        |> String.split(" ")
+        |> Enum.join()
+        |> Integer.parse()
+        |> elem(0)
+    end
   end
 end
