@@ -29,17 +29,13 @@ defmodule OlxScraper do
     price =
       document
       |> Floki.find("h3, zł")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
+      |> get_nested_element()
       |> str_to_num()
 
     additional_price =
       document
       |> Floki.find("ul li p:fl-contains('Czynsz')")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
+      |> get_nested_element()
       |> String.split(": ")
       |> Enum.at(1)
       |> String.split(" zł")
@@ -49,12 +45,17 @@ defmodule OlxScraper do
     title =
       document
       |> Floki.find("h1")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
+      |> get_nested_element()
 
+    negotiable? =
+      document
+      |> Floki.find("p:fl-contains('do negocjacji')")
+      |> Enum.empty?()
+      |> Kernel.!()
+
+    IO.inspect(negotiable?)
     IO.inspect(price)
-    # IO.inspect(title)
+    IO.inspect(title)
     IO.inspect(additional_price)
   end
 
@@ -70,5 +71,12 @@ defmodule OlxScraper do
         |> Integer.parse()
         |> elem(0)
     end
+  end
+
+  defp get_nested_element(enum) do
+    enum
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(0)
   end
 end
