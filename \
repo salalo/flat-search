@@ -1,5 +1,7 @@
 defmodule OlxScraper do
   use Crawly.Spider
+  use Crawly
+  alias Crawly.Utils
 
   @impl Crawly.Spider
   def base_url(), do: "https://www.olx.pl"
@@ -9,7 +11,7 @@ defmodule OlxScraper do
 
   @impl Crawly.Spider
   def parse_item(res) do
-    # First page only
+    # First page only 
     {:ok, document} = Floki.parse_document(res.body)
 
     flat_urls =
@@ -18,29 +20,14 @@ defmodule OlxScraper do
       |> Floki.attribute("href")
       |> Enum.reject(&(!String.contains?(&1, base_url())))
       |> Enum.uniq()
+      |> Enum.map(&Crawly.Utils.request_from_url/1)
+      |> get_price()
 
-    Enum.map(flat_urls, &parse_flat(&1))
+    IO.inspect(flat_urls)
   end
 
-  defp parse_flat(url) do
-    res = Crawly.fetch(url)
-    {:ok, document} = Floki.parse_document(res.body)
-
-    price =
-      document
-      |> Floki.find("h3, zł")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
-
-    title =
-      document
-      |> Floki.find("h1")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
-
-    IO.inspect(price)
-    IO.inspect(title)
+  @impl Crawly.Spider
+  defp get_price(url) do
+    fetch(url)
   end
 end
