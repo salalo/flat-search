@@ -53,10 +53,20 @@ defmodule OlxScraper do
       |> Enum.empty?()
       |> Kernel.!()
 
-    IO.inspect(negotiable?)
-    IO.inspect(price)
-    IO.inspect(title)
-    IO.inspect(additional_price)
+    # In form of list
+    description =
+      document
+      |> Floki.find("[data-cy=ad_description]")
+      |> Enum.at(0)
+      |> elem(2)
+      |> Enum.at(-1)
+      |> elem(2)
+
+    IO.inspect(description)
+    # IO.inspect(negotiable?)
+    # IO.inspect(price)
+    # IO.inspect(title)
+    # IO.inspect(additional_price)
   end
 
   defp str_to_num(num) do

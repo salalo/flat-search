@@ -4,6 +4,7 @@ defmodule FlatSearch.Repo.Migrations.AddFlatRecordTable do
   def change do
     create table("flat_record") do
       add :unique_id, :string
+      add :title, :string
       add :link, :string
       add :price, :integer
       add :additional_price, :integer
