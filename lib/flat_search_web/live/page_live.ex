@@ -1,6 +1,8 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
+  def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, assign(socket, query: "", results: %{})}
