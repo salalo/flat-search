@@ -10,7 +10,7 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
       add :additional_price, :integer
       add :negotiation, :boolean
       add :surface, :integer
-      # add :description, {:array, :text}
+      add :description, {:array, :text}
       add :favourite, :boolean
       add :state, :string
       add :photo_links, {:array, :string}

@@ -9,6 +9,5 @@ defmodule FlatSearch.Flats do
     %Flat{}
     |> Flat.changeset(attrs)
     |> Repo.insert()
-    |> IO.inspect()
   end
 end
