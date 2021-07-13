@@ -17,7 +17,7 @@ defmodule OlxScraper do
       document
       |> Floki.find("tr td div table tbody tr td a.link")
       |> Floki.attribute("href")
-      |> Enum.reject(&(!String.contains?(&1, base_url())))
+      |> Enum.filter(&String.contains?(&1, base_url()))
       |> Enum.uniq()
 
     Enum.map(flat_urls, &parse_flat(&1))
@@ -27,70 +27,75 @@ defmodule OlxScraper do
     res = Crawly.fetch(url)
     {:ok, document} = Floki.parse_document(res.body)
 
-    price =
-      document
-      |> Floki.find("h3, zł")
-      |> get_nested_element()
-      |> str_to_num()
-
-    additional_price =
-      document
-      |> Floki.find("ul li p:fl-contains('Czynsz')")
-      |> get_nested_element()
-      |> String.split(": ")
-      |> Enum.at(1)
-      |> String.split(" zł")
-      |> Enum.at(0)
-      |> str_to_num()
-
-    title =
-      document
-      |> Floki.find("h1")
-      |> get_nested_element()
-
-    negotiable? =
-      document
-      |> Floki.find("p:fl-contains('do negocjacji')")
-      |> Enum.empty?()
-      |> Kernel.!()
-
-    # In form of list
-    description =
-      document
-      |> Floki.find("[data-cy=ad_description]")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(-1)
-      |> elem(2)
-
-    surface =
-      document
-      |> Floki.find("p:fl-contains('Powierzchnia')")
-      |> get_nested_element()
-      |> String.split(": ")
-      |> Enum.at(1)
-      |> String.split(" m")
-      |> Enum.at(0)
-      |> str_to_num()
-
-    # In form of a list
-    photo_links =
-      document
-      |> Floki.find(".swiper-slide .swiper-zoom-container img")
-      |> Floki.attribute("data-src")
-
     flat_record = %{
-      price: price,
-      additional_price: additional_price,
-      title: title,
-      # description: description,
-      negotiation: negotiable?,
-      surface: surface,
-      photo_links: photo_links,
+      price: get_price(document),
+      additional_price: get_additional_price(document),
+      title: get_title(document),
+      # description: get_description(document),
+      negotiation: negotiable?(document),
+      surface: get_surface(document),
+      photo_links: get_photo_links(document),
       link: url
     }
 
     Flats.create_flat(flat_record)
+  end
+
+  defp get_title(document) do
+    document
+    |> Floki.find("h1")
+    |> get_nested_element()
+  end
+
+  defp get_price(document) do
+    document
+    |> Floki.find("h3, zł")
+    |> get_nested_element()
+    |> str_to_num()
+  end
+
+  defp get_additional_price(document) do
+    document
+    |> Floki.find("ul li p:fl-contains('Czynsz')")
+    |> get_nested_element()
+    |> String.split(": ")
+    |> Enum.at(1)
+    |> String.split(" zł")
+    |> Enum.at(0)
+    |> str_to_num()
+  end
+
+  defp negotiable?(document) do
+    document
+    |> Floki.find("p:fl-contains('do negocjacji')")
+    |> Enum.empty?()
+    |> Kernel.!()
+  end
+
+  defp get_description(document) do
+    document
+    |> Floki.find("[data-cy=ad_description]")
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(-1)
+    |> elem(2)
+  end
+
+  defp get_surface(document) do
+    document
+    |> Floki.find("p:fl-contains('Powierzchnia')")
+    |> get_nested_element()
+    |> String.split(": ")
+    |> Enum.at(1)
+    |> String.split(" m")
+    |> Enum.at(0)
+    |> str_to_num()
+  end
+
+  defp get_photo_links(document) do
+    document
+    |> Floki.find(".swiper-slide .swiper-zoom-container img")
+    |> Floki.attribute("data-src")
   end
 
   defp str_to_num(num) do
