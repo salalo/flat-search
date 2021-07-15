@@ -1,5 +1,5 @@
 <h1>What are you looking for?</h1>
-<%= f = form_for(@changeset, "#", phx_save: :validate_search) %>
+<%= f = form_for(@changeset, "#", phx_submit: :search) %>
   <div>
     <%= text_input f, :region, placeholder: "Region" %>
     <%= error_tag f, :region %>

@@ -6,7 +6,9 @@ defmodule OlxScraper do
   def base_url(), do: "https://www.olx.pl"
 
   @impl Crawly.Spider
-  def init(), do: [start_urls: ["https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]]
+  def init() do
+    [start_urls: ["https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]]
+  end
 
   @impl Crawly.Spider
   def parse_item(res) do

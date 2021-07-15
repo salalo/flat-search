@@ -20,5 +20,6 @@ defmodule FlatSearch.Filters.Filter do
     filter
     |> cast(attrs, @default_params)
     |> validate_inclusion(:max_price, 1..100_000)
+    |> validate_required(:max_price)
   end
 end
