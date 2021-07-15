@@ -1,6 +1,7 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
+  @impl true
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
 
   @impl true

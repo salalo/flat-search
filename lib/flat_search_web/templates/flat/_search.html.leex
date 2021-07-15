@@ -1,2 +1,18 @@
-<h1>SEARCH</h1>
+<h1>What are you looking for?</h1>
+<%= f = form_for(@changeset, phx_validate: :validate, phx_save: :save) %>
+  <div>
+    <%= text_input f, :name, placeholder: "Name" %>
+    <%= error_tag f, :name %>
+  </div>
+  <div>
+    <%= text_input f, :username, placeholder: "Username" %>
+    <%= error_tag f, :username %>
+  </div>
+  <div>
+    <%= password_input f, :password, placeholder: "Password" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <%= submit "Search" %>
+</form>
 
