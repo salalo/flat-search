@@ -1,16 +1,18 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
+  alias FlatSearch.Filters.Filter
+
   @impl true
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{})})}
   end
 
   @impl true
-  def handle_event("suggest", %{"q" => query}, socket) do
+  def handle_event("validate", %{"q" => query}, socket) do
     {:noreply, assign(socket, results: search(query), query: query)}
   end
 

@@ -1,18 +1,29 @@
 <h1>What are you looking for?</h1>
-<%= f = form_for(@changeset, phx_validate: :validate, phx_save: :save) %>
+<%= f = form_for(@changeset, "#", phx_save: :validate_search) %>
   <div>
-    <%= text_input f, :name, placeholder: "Name" %>
-    <%= error_tag f, :name %>
-  </div>
-  <div>
-    <%= text_input f, :username, placeholder: "Username" %>
-    <%= error_tag f, :username %>
-  </div>
-  <div>
-    <%= password_input f, :password, placeholder: "Password" %>
-    <%= error_tag f, :password %>
+    <%= text_input f, :region, placeholder: "Region" %>
+    <%= error_tag f, :region %>
   </div>
 
+  <div>
+    <%= text_input f, :city, placeholder: "City" %>
+    <%= error_tag f, :city %>
+  </div>
+
+  <div>
+    <%= text_input f, :district, placeholder: "District" %>
+    <%= error_tag f, :district %>
+  </div>
+
+  <div>
+    <%= text_input f, :street, placeholder: "Street" %>
+    <%= error_tag f, :street %>
+  </div>
+
+  <div>
+    <%= text_input f, :max_price, placeholder: "Max price" %>
+    <%= error_tag f, :max_price %>
+  </div>
   <%= submit "Search" %>
 </form>
 
