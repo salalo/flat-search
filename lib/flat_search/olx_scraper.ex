@@ -1,16 +1,16 @@
 defmodule OlxScraper do
   use Crawly.Spider
+  alias Crawly.Engine
   alias FlatSearch.Flats
 
   @impl Crawly.Spider
   def base_url(), do: "https://www.olx.pl"
 
   @impl Crawly.Spider
-  def init(), do: [start_urls: ["https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]]
+  def init(), do: [start_urls: "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]
 
   @impl Crawly.Spider
   def parse_item(res) do
-    # First page only
     {:ok, document} = Floki.parse_document(res.body)
 
     flat_urls =
@@ -21,6 +21,46 @@ defmodule OlxScraper do
       |> Enum.uniq()
 
     Enum.map(flat_urls, &parse_flat(&1))
+  end
+
+  def run do
+    url = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
+    res = Crawly.fetch(url)
+    {:ok, document} = Floki.parse_document(res.body)
+
+    # Run get_flat() for every page simultaneously
+    for n <- get_range_of_pages(document) do
+      Task.async(fn -> get_flats(url <> "?page=#{n}") end)
+    end
+  end
+
+  defp get_flats(url) do
+    res = Crawly.fetch(url)
+    {:ok, document} = Floki.parse_document(res.body)
+
+    flat_urls =
+      document
+      |> Floki.find("tr td div table tbody tr td a.link")
+      |> Floki.attribute("href")
+      |> Enum.filter(&String.contains?(&1, base_url()))
+      |> Enum.uniq()
+
+    Enum.map(flat_urls, &parse_flat(&1))
+  end
+
+  defp get_range_of_pages(document) do
+    # Gets number of pages
+    num_of_pages =
+      document
+      |> Floki.find("[data-cy=page-link-last]")
+      |> Enum.at(0)
+      |> elem(2)
+      |> Enum.at(0)
+      |> elem(2)
+      |> Enum.at(0)
+      |> str_to_num()
+
+    1..num_of_pages
   end
 
   defp parse_flat(url) do
@@ -38,6 +78,7 @@ defmodule OlxScraper do
       link: url
     }
 
+    # DB query
     Flats.create_flat(flat_record)
   end
 
