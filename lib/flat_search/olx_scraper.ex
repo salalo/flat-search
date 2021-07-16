@@ -1,31 +1,61 @@
-defmodule OlxScraper do
-  use Crawly.Spider
+defmodule FlatSearch.OlxScraper do
   alias FlatSearch.Flats
 
-  @impl Crawly.Spider
-  def base_url(), do: "https://www.olx.pl"
+  @base_query_url "https://www.olx.pl"
+  @query_url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
 
-  @impl Crawly.Spider
-  def init(), do: [start_urls: ["https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]]
+  def run do
+    @query_url
+    |> Crawly.fetch()
+    |> Map.get(:body)
+    |> Floki.parse_document()
+    |> case do
+      {:ok, document} -> document
+      _ -> ""
+    end
+    |> get_range_of_pages()
+    |> Enum.each(&Task.async(fn -> get_flats("#{@query_url}?page=#{&1}") end))
+  end
 
-  @impl Crawly.Spider
-  def parse_item(res) do
-    # First page only
-    {:ok, document} = Floki.parse_document(res.body)
+  defp get_flats(url) do
+    url
+    |> Crawly.fetch()
+    |> Map.get(:body)
+    |> Floki.parse_document()
+    |> case do
+      {:ok, document} -> document
+      _ -> ""
+    end
+    |> Floki.find("tr td div table tbody tr td a.link")
+    |> Floki.attribute("href")
+    |> Enum.filter(&String.contains?(&1, @base_query_url))
+    |> Enum.uniq()
+    |> Enum.map(&parse_flat(&1))
+  end
 
-    flat_urls =
-      document
-      |> Floki.find("tr td div table tbody tr td a.link")
-      |> Floki.attribute("href")
-      |> Enum.filter(&String.contains?(&1, base_url()))
-      |> Enum.uniq()
-
-    Enum.map(flat_urls, &parse_flat(&1))
+  defp get_range_of_pages(document) do
+    # Gets number of pages
+    document
+    |> Floki.find("[data-cy=page-link-last]")
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(0)
+    |> str_to_num()
+    |> Range.new(1)
   end
 
   defp parse_flat(url) do
-    res = Crawly.fetch(url)
-    {:ok, document} = Floki.parse_document(res.body)
+    document =
+      url
+      |> Crawly.fetch()
+      |> Map.get(:body)
+      |> Floki.parse_document()
+      |> case do
+        {:ok, document} -> document
+        _ -> ""
+      end
 
     flat_record = %{
       price: get_price(document),
