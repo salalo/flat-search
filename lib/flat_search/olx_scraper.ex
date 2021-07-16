@@ -1,30 +1,34 @@
 defmodule FlatSearch.OlxScraper do
   alias FlatSearch.Flats
 
-  @base_url "https://www.olx.pl"
-  @url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
+  @base_query_url "https://www.olx.pl"
+  @query_url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
 
   def run do
-    Crawly.fetch(@url).body
+    @query_url
+    |> Crawly.fetch()
+    |> Map.get(:body)
     |> Floki.parse_document()
     |> case do
       {:ok, document} -> document
-      _ -> nil
+      _ -> ""
     end
     |> get_range_of_pages()
-    |> Enum.each(&Task.async(fn -> get_flats("#{@url}?page=#{&1}") end))
+    |> Enum.each(&Task.async(fn -> get_flats("#{@query_url}?page=#{&1}") end))
   end
 
   defp get_flats(url) do
-    Crawly.fetch(url).body
+    url
+    |> Crawly.fetch()
+    |> Map.get(:body)
     |> Floki.parse_document()
     |> case do
       {:ok, document} -> document
-      _ -> nil
+      _ -> ""
     end
     |> Floki.find("tr td div table tbody tr td a.link")
     |> Floki.attribute("href")
-    |> Enum.filter(&String.contains?(&1, @base_url))
+    |> Enum.filter(&String.contains?(&1, @base_query_url))
     |> Enum.uniq()
     |> Enum.map(&parse_flat(&1))
   end
@@ -44,11 +48,13 @@ defmodule FlatSearch.OlxScraper do
 
   defp parse_flat(url) do
     document =
-      Crawly.fetch(url).body
+      url
+      |> Crawly.fetch()
+      |> Map.get(:body)
       |> Floki.parse_document()
       |> case do
         {:ok, document} -> document
-        _ -> nil
+        _ -> ""
       end
 
     flat_record = %{
