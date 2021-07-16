@@ -1,49 +1,55 @@
 defmodule FlatSearch.OlxScraper do
   alias FlatSearch.Flats
 
-  def run do
-    url = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
-    res = Crawly.fetch(url)
-    {:ok, document} = Floki.parse_document(res.body)
+  @base_url "https://www.olx.pl"
+  @url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
 
-    # Run get_flat() for every page simultaneously
-    for n <- get_range_of_pages(document) do
-      Task.async(fn -> get_flats(url <> "?page=#{n}") end)
+  def run do
+    Crawly.fetch(@url).body
+    |> Floki.parse_document()
+    |> case do
+      {:ok, document} -> document
+      _ -> nil
     end
+    |> get_range_of_pages()
+    |> Enum.each(&Task.async(fn -> get_flats("#{@url}?page=#{&1}") end))
   end
 
   defp get_flats(url) do
-    res = Crawly.fetch(url)
-    {:ok, document} = Floki.parse_document(res.body)
-
-    flat_urls =
-      document
-      |> Floki.find("tr td div table tbody tr td a.link")
-      |> Floki.attribute("href")
-      |> Enum.filter(&String.contains?(&1, "https://www.olx.pl"))
-      |> Enum.uniq()
-
-    Enum.map(flat_urls, &parse_flat(&1))
+    Crawly.fetch(url).body
+    |> Floki.parse_document()
+    |> case do
+      {:ok, document} -> document
+      _ -> nil
+    end
+    |> Floki.find("tr td div table tbody tr td a.link")
+    |> Floki.attribute("href")
+    |> Enum.filter(&String.contains?(&1, @base_url))
+    |> Enum.uniq()
+    |> Enum.map(&parse_flat(&1))
   end
 
   defp get_range_of_pages(document) do
     # Gets number of pages
-    num_of_pages =
-      document
-      |> Floki.find("[data-cy=page-link-last]")
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
-      |> elem(2)
-      |> Enum.at(0)
-      |> str_to_num()
-
-    1..num_of_pages
+    document
+    |> Floki.find("[data-cy=page-link-last]")
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(0)
+    |> elem(2)
+    |> Enum.at(0)
+    |> str_to_num()
+    |> Range.new(1)
   end
 
   defp parse_flat(url) do
-    res = Crawly.fetch(url)
-    {:ok, document} = Floki.parse_document(res.body)
+    document =
+      Crawly.fetch(url).body
+      |> Floki.parse_document()
+      |> case do
+        {:ok, document} -> document
+        _ -> nil
+      end
 
     flat_record = %{
       price: get_price(document),
