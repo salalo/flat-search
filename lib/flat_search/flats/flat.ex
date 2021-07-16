@@ -33,6 +33,7 @@ defmodule FlatSearch.Flats.Flat do
       :photo_links
     ])
     |> put_link_hash()
+    |> unique_constraint(:unique_id)
   end
 
   defp put_link_hash(changeset) do

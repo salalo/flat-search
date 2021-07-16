@@ -78,7 +78,6 @@ defmodule OlxScraper do
       link: url
     }
 
-    # DB query
     Flats.create_flat(flat_record)
   end
 
