@@ -1,27 +1,5 @@
-defmodule OlxScraper do
-  use Crawly.Spider
-  alias Crawly.Engine
+defmodule FlatSearch.OlxScraper do
   alias FlatSearch.Flats
-
-  @impl Crawly.Spider
-  def base_url(), do: "https://www.olx.pl"
-
-  @impl Crawly.Spider
-  def init(), do: [start_urls: "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"]
-
-  @impl Crawly.Spider
-  def parse_item(res) do
-    {:ok, document} = Floki.parse_document(res.body)
-
-    flat_urls =
-      document
-      |> Floki.find("tr td div table tbody tr td a.link")
-      |> Floki.attribute("href")
-      |> Enum.filter(&String.contains?(&1, base_url()))
-      |> Enum.uniq()
-
-    Enum.map(flat_urls, &parse_flat(&1))
-  end
 
   def run do
     url = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
@@ -42,7 +20,7 @@ defmodule OlxScraper do
       document
       |> Floki.find("tr td div table tbody tr td a.link")
       |> Floki.attribute("href")
-      |> Enum.filter(&String.contains?(&1, base_url()))
+      |> Enum.filter(&String.contains?(&1, "https://www.olx.pl"))
       |> Enum.uniq()
 
     Enum.map(flat_urls, &parse_flat(&1))
