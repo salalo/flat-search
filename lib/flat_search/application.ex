@@ -6,6 +6,8 @@ defmodule FlatSearch.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec, warn: false
+
     children = [
       # Start the Ecto repository
       FlatSearch.Repo,
@@ -14,9 +16,10 @@ defmodule FlatSearch.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: FlatSearch.PubSub},
       # Start the Endpoint (http/https)
-      FlatSearchWeb.Endpoint
+      FlatSearchWeb.Endpoint,
       # Start a worker by calling: FlatSearch.Worker.start_link(arg)
       # {FlatSearch.Worker, arg}
+      FlatSearch.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
