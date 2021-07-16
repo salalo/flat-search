@@ -15,8 +15,5 @@ defmodule FlatSearchWeb.PageLive do
   def handle_event("search", %{"filter" => params}, socket) do
     IO.inspect(params)
     IO.inspect(socket)
-
-    # How to set parameters to the url dynamically???
-    Crawly.Engine.start_spider(OlxScraper)
   end
 end
