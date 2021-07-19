@@ -14,9 +14,6 @@ defmodule FlatSearchWeb.PageLive do
 
   @impl true
   def handle_event("search", %{"filter" => params}, socket) do
-    IO.inspect(params)
-    IO.inspect(socket)
-
     changeset =
       %Filter{}
       |> Filters.change_filter(params)
