@@ -16,7 +16,6 @@ defmodule FlatSearchWeb.PageLive do
     IO.inspect(params)
     IO.inspect(socket)
 
-    # {:noreply, assign(socket, changeset: Filter.changeset())}
     {:noreply, socket}
   end
 end

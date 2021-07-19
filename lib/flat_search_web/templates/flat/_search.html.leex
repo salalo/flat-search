@@ -1,29 +1,31 @@
-<h1>What are you looking for?</h1>
+<h1 class="mb-12 text-6xl antialiased">What are you looking for?</h1>
 
 <%= f = form_for(@changeset, "#", phx_change: :search) %>
-  <div>
-    <%= text_input f, :region, placeholder: "Region", phx_debounce: "blur" %>
-    <%= error_tag f, :region %>
-  </div>
+  <div class="flex flex-row">
+    <div>
+      <%= text_input f, :region, placeholder: "Region", phx_debounce: "blur" %>
+      <%= error_tag f, :region %>
+    </div>
 
-  <div>
-    <%= text_input f, :city, placeholder: "City", phx_debounce: "blur" %>
-    <%= error_tag f, :city %>
-  </div>
+    <div class="ml-5">
+      <%= text_input f, :city, placeholder: "City", phx_debounce: "blur" %>
+      <%= error_tag f, :city %>
+    </div>
 
-  <div>
-    <%= text_input f, :district, placeholder: "District", phx_debounce: "blur" %>
-    <%= error_tag f, :district %>
-  </div>
+    <div class="mx-5">
+      <%= text_input f, :district, placeholder: "District", phx_debounce: "blur" %>
+      <%= error_tag f, :district %>
+    </div>
 
-  <div>
-    <%= text_input f, :street, placeholder: "Street", phx_debounce: "blur" %>
-    <%= error_tag f, :street %>
-  </div>
+    <div class="mr-5">
+      <%= text_input f, :street, placeholder: "Street", phx_debounce: "blur" %>
+      <%= error_tag f, :street %>
+    </div>
 
-  <div>
-    <%= text_input f, :max_price, placeholder: "Max price", phx_debounce: "1000" %>
-    <%= error_tag f, :max_price %>
+    <div>
+      <%= text_input f, :max_price, placeholder: "Max price", phx_debounce: "1000" %>
+      <%= error_tag f, :max_price %>
+    </div>
   </div>
 </form>
 
