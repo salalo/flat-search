@@ -4,27 +4,37 @@
   <div class="flex flex-row">
     <div>
       <%= text_input f, :region, placeholder: "Region", phx_debounce: "blur" %>
-      <%= error_tag f, :region %>
+      <p class="mt-5">
+        <%= error_tag f, :region %>
+      </p>
     </div>
 
     <div class="ml-5">
       <%= text_input f, :city, placeholder: "City", phx_debounce: "blur" %>
-      <%= error_tag f, :city %>
+      <p class="mt-5">
+        <%= error_tag f, :city %>
+      </p>
     </div>
 
     <div class="mx-5">
       <%= text_input f, :district, placeholder: "District", phx_debounce: "blur" %>
-      <%= error_tag f, :district %>
+      <p class="mt-5">
+        <%= error_tag f, :district %>
+      </p>
     </div>
 
     <div class="mr-5">
       <%= text_input f, :street, placeholder: "Street", phx_debounce: "blur" %>
-      <%= error_tag f, :street %>
+      <p class="mt-5">
+        <%= error_tag f, :street %>
+      </p>
     </div>
 
     <div>
       <%= text_input f, :max_price, placeholder: "Max price", phx_debounce: "1000" %>
-      <%= error_tag f, :max_price %>
+      <p class="mt-5">
+        <%= error_tag f, :max_price %>
+      </p>
     </div>
   </div>
 </form>

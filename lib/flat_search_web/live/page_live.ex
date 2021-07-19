@@ -1,6 +1,7 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
+  alias FlatSearch.Filters
   alias FlatSearch.Filters.Filter
 
   @impl true
@@ -16,6 +17,11 @@ defmodule FlatSearchWeb.PageLive do
     IO.inspect(params)
     IO.inspect(socket)
 
-    {:noreply, socket}
+    changeset =
+      %Filter{}
+      |> Filters.change_filter(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply, assign(socket, changeset: changeset)}
   end
 end
