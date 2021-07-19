@@ -15,5 +15,8 @@ defmodule FlatSearchWeb.PageLive do
   def handle_event("search", %{"filter" => params}, socket) do
     IO.inspect(params)
     IO.inspect(socket)
+
+    # {:noreply, assign(socket, changeset: Filter.changeset())}
+    {:noreply, socket}
   end
 end
