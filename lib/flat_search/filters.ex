@@ -5,5 +5,5 @@ defmodule FlatSearch.Filters do
 
   alias FlatSearch.Filters.Filter
 
-  def change_filter(%Filter{} = filter, params \\ %{}), do: Filter.changeset(filter, %{})
+  def change_filter(%Filter{} = filter, params \\ %{}), do: Filter.changeset(filter, params)
 end
