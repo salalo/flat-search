@@ -19,7 +19,7 @@ defmodule FlatSearch.Filters.Filter do
   def changeset(filter, attrs) do
     filter
     |> cast(attrs, @default_params)
-    |> validate_inclusion(:max_price, 1..100_000)
     |> validate_required(:max_price)
+    |> validate_inclusion(:max_price, 1..100_000)
   end
 end

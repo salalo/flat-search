@@ -5,20 +5,22 @@ defmodule FlatSearch.Flats do
   alias FlatSearch.{Repo, Flats.Flat}
 
   def get_flat(id) do
-    with res when not is_nil(res) <-
-           Repo.get(Flat, id) do
-      {:ok, res}
-    else
-      _error -> {:error, :not_found}
+    case Repo.get(Flat, id) do
+      nil ->
+        {:error, :not_found}
+
+      flat ->
+        {:ok, flat}
     end
   end
 
   def get_flat_by(params) do
-    with res when not is_nil(res) <-
-           Repo.get_by(Flat, params) do
-      {:ok, res}
-    else
-      _error -> {:error, :not_found}
+    case Repo.get(Flat, params) do
+      nil ->
+        {:error, :not_found}
+
+      flat ->
+        {:ok, flat}
     end
   end
 

@@ -1,8 +1,7 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
-  alias FlatSearch.Filters
-  alias FlatSearch.Filters.Filter
+  alias FlatSearch.{Filters, Filters.Filter}
 
   @impl true
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
