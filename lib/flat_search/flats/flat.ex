@@ -19,6 +19,10 @@ defmodule FlatSearch.Flats.Flat do
     field :favourite, :boolean
     field :state, :string
     field :photo_links, {:array, :string}
+    field :region, :string
+    field :city, :string
+    field :district, :string
+    field :street, :string
 
     timestamps()
   end
@@ -27,6 +31,7 @@ defmodule FlatSearch.Flats.Flat do
     flat
     |> cast(attrs, @default_params)
     |> validate_required([
+      # :city,
       :title,
       :price,
       :link,
