@@ -1,7 +1,7 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
 
-  alias FlatSearch.{Filters, Filters.Filter}
+  alias FlatSearch.{Filters, Filters.Filter, Flats}
 
   @impl true
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
@@ -18,6 +18,8 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
-    {:noreply, assign(socket, changeset: changeset)}
+    flats = Flats.get_flats()
+
+    {:noreply, assign(socket, changeset: changeset, flats: flats)}
   end
 end

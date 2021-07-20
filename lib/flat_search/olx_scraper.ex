@@ -1,7 +1,7 @@
 defmodule FlatSearch.OlxScraper do
   alias FlatSearch.Flats
 
-  @base_query_url "https://www.olx.pl"
+  @base_query_lrl "https://www.olx.pl"
   @query_url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
 
   def run do
@@ -17,7 +17,7 @@ defmodule FlatSearch.OlxScraper do
     |> Enum.each(&Task.async(fn -> get_flats("#{@query_url}?page=#{&1}") end))
   end
 
-  defp get_flats(url) do
+  def get_flats(url) do
     url
     |> Crawly.fetch()
     |> Map.get(:body)
@@ -26,11 +26,14 @@ defmodule FlatSearch.OlxScraper do
       {:ok, document} -> document
       _ -> ""
     end
+    |> get_localization()
     |> Floki.find("tr td div table tbody tr td a.link")
     |> Floki.attribute("href")
     |> Enum.filter(&String.contains?(&1, @base_query_url))
     |> Enum.uniq()
     |> Enum.map(&parse_flat(&1))
+
+    # get_localization(document)
   end
 
   defp get_range_of_pages(document) do
@@ -68,7 +71,14 @@ defmodule FlatSearch.OlxScraper do
       link: url
     }
 
-    Flats.create_flat(flat_record)
+    # Flats.create_flat(flat_record)
+  end
+
+  defp get_localization(document) do
+    document
+    |> Floki.find(".offer-wrapper table tbody tr .bottom-cell div p small span:fl-contains(', ')")
+    |> Floki.text(sep: "\n")
+    |> String.split("\n")
   end
 
   defp get_title(document) do

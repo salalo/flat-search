@@ -1,0 +1,16 @@
+<%= for flat <- @flats do %>
+  <div class="flex bg-red-700">
+
+    <%# CORB %>
+    <%# <img src='<%= flat.link %>' %>
+    <p class="">
+      <%= flat.title %>
+    <p>
+
+    <div class="">
+      <%= flat.price %>
+      <%= flat.additional_price %>
+    <div>
+
+  </div>
+<% end %>
