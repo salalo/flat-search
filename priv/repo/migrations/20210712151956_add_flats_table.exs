@@ -14,6 +14,10 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
       add :favourite, :boolean
       add :state, :string
       add :photo_links, {:array, :string}
+      add :region, :string
+      add :city, :string
+      add :district, :string
+      add :street, :string
 
       timestamps()
     end

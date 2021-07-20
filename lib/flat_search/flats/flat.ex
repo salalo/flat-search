@@ -5,7 +5,7 @@ defmodule FlatSearch.Flats.Flat do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @default_params ~w(title price link additional_price negotiation surface description photo_links)a
+  @default_params ~w(title price link additional_price negotiation surface description photo_links region city district street)a
 
   schema "flats" do
     field :unique_id, :string
@@ -31,7 +31,7 @@ defmodule FlatSearch.Flats.Flat do
     flat
     |> cast(attrs, @default_params)
     |> validate_required([
-      # :city,
+      :city,
       :title,
       :price,
       :link,

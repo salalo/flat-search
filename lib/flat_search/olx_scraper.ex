@@ -64,10 +64,23 @@ defmodule FlatSearch.OlxScraper do
       negotiation: negotiable?(document),
       surface: get_surface(document),
       photo_links: get_photo_links(document),
-      link: url
+      link: url,
+      region: Enum.at(get_localization(document), 0),
+      city: Enum.at(get_localization(document), 1),
+      district: Enum.at(get_localization(document), 2)
     }
 
     Flats.create_flat(flat_record)
+  end
+
+  defp get_localization(document) do
+    # Returns list of strings
+    # [Region, City, District | null] 
+    document
+    |> Floki.find("[data-testid=breadcrumb-item] a:fl-contains('Wynajem - ')")
+    |> Floki.text()
+    |> String.split("Wynajem - ")
+    |> tl()
   end
 
   defp get_title(document) do
