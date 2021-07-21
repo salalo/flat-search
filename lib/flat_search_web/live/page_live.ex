@@ -1,6 +1,5 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
-
   alias FlatSearch.{Filters, Filters.Filter, Flats}
 
   @impl true
@@ -8,7 +7,7 @@ defmodule FlatSearchWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{})})}
+    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: []})}
   end
 
   @impl true
@@ -18,7 +17,7 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
-    flats = Flats.get_flats()
+    flats = Flats.get_flats_by(params)
 
     {:noreply, assign(socket, changeset: changeset, flats: flats)}
   end

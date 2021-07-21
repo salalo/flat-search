@@ -3,6 +3,7 @@ defmodule FlatSearch.Flats do
   Flats context
   """
   alias FlatSearch.{Repo, Flats.Flat}
+  import Ecto.Query
 
   def get_flat(id) do
     case Repo.get(Flat, id) do
@@ -15,7 +16,7 @@ defmodule FlatSearch.Flats do
   end
 
   def get_flat_by(params) do
-    case Repo.get(Flat, params) do
+    case Repo.get_by(Flat, params) do
       nil ->
         {:error, :not_found}
 
@@ -25,6 +26,18 @@ defmodule FlatSearch.Flats do
   end
 
   def get_flats, do: Repo.all(Flat)
+
+  def get_flats_by(params) do
+    params
+    |> Enum.reduce(Flat, fn
+      {_field, none}, query when none in ["", nil] ->
+        query
+
+      {field, value}, query ->
+        where(query, ^[{String.to_existing_atom(field), value}])
+    end)
+    |> Repo.all()
+  end
 
   def create_flat(attrs \\ %{}) do
     %Flat{}
