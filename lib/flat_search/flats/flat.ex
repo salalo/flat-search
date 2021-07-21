@@ -5,7 +5,7 @@ defmodule FlatSearch.Flats.Flat do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @default_params ~w(title price link additional_price negotiation surface description photo_links region city district street)a
+  @default_params ~w(title price link additional_price negotiation surface description photo_links region city district)a
 
   schema "flats" do
     field :unique_id, :string
@@ -22,7 +22,6 @@ defmodule FlatSearch.Flats.Flat do
     field :region, :string
     field :city, :string
     field :district, :string
-    field :street, :string
 
     timestamps()
   end

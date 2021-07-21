@@ -28,6 +28,7 @@ defmodule FlatSearch.Flats do
   def get_flats, do: Repo.all(Flat)
 
   def get_flats_by(params) do
+    # TODO: Support max price
     params
     |> Enum.reduce(Flat, fn
       {_field, none}, query when none in ["", nil] ->
