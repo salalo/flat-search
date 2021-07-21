@@ -1,16 +1,29 @@
 <%= for flat <- @flats do %>
-  <div class="flex bg-red-700">
+  <a href='<%= flat.link %>'target="_blank" class="flex h-48 w-full mb-8 cursor-pointer text-gray-500  hover:text-black">
+    <img src='<%= List.first(flat.photo_links) %>' class="h-full w-48 mr-3">
 
-    <%# CORB %>
-    <img src='<%= List.first(flat.photo_links) %>' class="h-44 w-44">
-    <p class="">
-      <%= flat.title %>
-    <p>
+    <div class="flex flex-col justify-between h-full">
+      <p class="">
+        <%= flat.title %>
+      </p>
 
-    <div class="">
-      <%= flat.price %>
-      <%= flat.additional_price %>
-    <div>
+      <p>
+        Do negocjacji:
+        <%= if flat.negotiation do %>
+          <b>TAK</b>
+        <% else %>
+          <b>NIE</b>
+        <% end %>
+      <br>
+      </p>
 
-  </div>
+      <p>
+        Powierzchnia: <b><%= flat.surface %> &#13217;</b><br>
+      </p>
+
+      <div class="">
+        <b><%= flat.additional_price + flat.price %> zł</b>
+      </div>
+    </div>
+  </a>
 <% end %>

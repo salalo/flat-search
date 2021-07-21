@@ -29,6 +29,7 @@ defmodule FlatSearch.Flats do
 
   def get_flats_by(params) do
     # TODO: Support max price
+    # Search should not be case sensitive
     params
     |> Enum.reduce(Flat, fn
       {_field, none}, query when none in ["", nil] ->
