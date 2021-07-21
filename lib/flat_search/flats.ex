@@ -28,11 +28,13 @@ defmodule FlatSearch.Flats do
   def get_flats, do: Repo.all(Flat)
 
   def get_flats_by(params) do
-    # TODO: Support max price
     params
     |> Enum.reduce(Flat, fn
       {_field, none}, query when none in ["", nil] ->
         query
+
+      {"max_price", max_price}, query ->
+        from q in query, where: q.price + q.additional_price <= ^String.to_integer(max_price)
 
       {field, value}, query ->
         where(query, ^[{String.to_existing_atom(field), value}])
