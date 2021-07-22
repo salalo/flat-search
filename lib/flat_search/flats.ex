@@ -2,7 +2,7 @@ defmodule FlatSearch.Flats do
   @moduledoc """
   Flats context
   """
-  alias FlatSearch.{Repo, Flats.Flat, PubSubManager}
+  alias FlatSearch.{Repo, Flats.Flat, Flats.PubSub}
   import Ecto.Query
 
   def get_flat(id) do
@@ -46,6 +46,6 @@ defmodule FlatSearch.Flats do
     %Flat{}
     |> Flat.changeset(attrs)
     |> Repo.insert()
-    |> PubSubManager.notify_subscribers([:flat, :created])
+    |> PubSub.notify_subscribers([:flat, :created])
   end
 end

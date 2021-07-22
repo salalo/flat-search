@@ -1,13 +1,13 @@
 defmodule FlatSearchWeb.PageLive do
   use FlatSearchWeb, :live_view
-  alias FlatSearch.{Filters, Filters.Filter, Flats, PubSubManager}
+  alias FlatSearch.{Filters, Filters.Filter, Flats, Flats.PubSub}
 
   @impl true
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: PubSubManager.subscribe()
+    if connected?(socket), do: PubSub.subscribe()
     {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: []})}
   end
 
