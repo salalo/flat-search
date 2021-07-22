@@ -12,6 +12,16 @@ defmodule FlatSearchWeb.PageLive do
   end
 
   @impl true
+  def handle_info({:flat_created, flat}, socket) do
+    {:noreply, assign(socket, flats: [flat] ++ socket.assigns.flats)}
+  end
+
+  @impl true
+  def handle_info({:error, msg}, socket) do
+    {:noreply, assign(socket, error: msg)}
+  end
+
+  @impl true
   def handle_event("search", %{"filter" => params}, socket) do
     changeset =
       %Filter{}

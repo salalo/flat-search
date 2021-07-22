@@ -46,6 +46,6 @@ defmodule FlatSearch.Flats do
     %Flat{}
     |> Flat.changeset(attrs)
     |> Repo.insert()
-    |> PubSub.notify_subscribers([:flat, :created])
+    |> PubSub.broadcast(:flat_created)
   end
 end
