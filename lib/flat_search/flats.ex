@@ -2,29 +2,8 @@ defmodule FlatSearch.Flats do
   @moduledoc """
   Flats context
   """
-  alias FlatSearch.{Repo, Flats.Flat}
+  alias FlatSearch.{Repo, Flats.Flat, PubSubManager}
   import Ecto.Query
-
-  @topic inspect(__MODULE__)
-
-  def subscribe do
-    Phoenix.PubSub.subscribe(FlatSearch.PubSub, @topic)
-  end
-
-  def broadcast({:ok, record}, event) do
-    Phoenix.PubSub.broadcast(FlatSearch.PubSub, @topic, {event, record})
-    {:ok, record}
-  end
-
-  def broadcast({:error, _} = error, _event), do: error
-
-  defp notify_subscribers({:ok, result}, event) do
-    Phoenix.PubSub.broadcast(FlatSearch.PubSub, @topic, {__MODULE__, event, result})
-
-    {:ok, result}
-  end
-
-  defp notify_subscribers({:error, reason}, _), do: {:error, reason}
 
   def get_flat(id) do
     case Repo.get(Flat, id) do
@@ -67,6 +46,6 @@ defmodule FlatSearch.Flats do
     %Flat{}
     |> Flat.changeset(attrs)
     |> Repo.insert()
-    |> notify_subscribers([:flat, :created])
+    |> PubSubManager.notify_subscribers([:flat, :created])
   end
 end

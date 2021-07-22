@@ -3,25 +3,19 @@
     <img src='<%= List.first(flat.photo_links) %>' class="h-full w-48 mr-3">
 
     <div class="flex flex-col justify-between h-full">
-      <p class="">
+      <p>
         <%= flat.title %>
       </p>
 
       <p>
-        Do negocjacji:
-        <%= if flat.negotiation do %>
-          <b>TAK</b>
-        <% else %>
-          <b>NIE</b>
-        <% end %>
-      <br>
+        Do negocjacji: <b><%= if flat.negotiation, do: "TAK", else: "NIE" %></b><br>
       </p>
 
       <p>
         Powierzchnia: <b><%= flat.surface %> &#13217;</b><br>
       </p>
 
-      <div class="">
+      <div>
         <b><%= flat.additional_price + flat.price %> zł</b>
       </div>
     </div>

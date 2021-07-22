@@ -73,9 +73,8 @@ defmodule FlatSearch.OlxScraper do
     Flats.create_flat(flat_record)
   end
 
+  @spec get_localization(document :: HTML) :: [String.t() | nil, ...]
   defp get_localization(document) do
-    # Returns list of strings
-    # [Region, City, District | null] 
     document
     |> Floki.find("[data-testid=breadcrumb-item] a:fl-contains('Wynajem - ')")
     |> Floki.text()
@@ -154,7 +153,7 @@ defmodule FlatSearch.OlxScraper do
     end
   end
 
-  defp get_nested_element(enum) do
+  defp get_nested_element(enum) when enum != [] do
     enum
     |> Enum.at(0)
     |> elem(2)
