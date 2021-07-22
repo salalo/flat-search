@@ -7,6 +7,7 @@ defmodule FlatSearchWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Flats.subscribe()
     {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: []})}
   end
 
