@@ -12,6 +12,17 @@ defmodule FlatSearchWeb.PageLive do
   end
 
   @impl true
+  def handle_event("search", %{"filter" => params}, socket) do
+    changeset =
+      %Filter{}
+      |> Filters.change_filter(params)
+      |> Map.put(:action, :insert)
+
+    {:noreply,
+     assign(socket, changeset: changeset, flats: Flats.get_flats_by(params), filters: params)}
+  end
+
+  @impl true
   def handle_info({:flat_created, flat}, socket) do
     insensitive_string("Warszawą Dąbrowa")
 
@@ -24,28 +35,55 @@ defmodule FlatSearchWeb.PageLive do
     end
   end
 
+  @impl true
+  def handle_info({:error, reason}, socket) do
+    {:noreply, assign(socket, reason: reason)}
+  end
+
   defp flat_fulfills_filters?(user_filters, flat_filters) do
-    # compare only if key exists in flat_filters and user_filters key is not empty
-    # enum return ok?
-    key_exists_and_has_value? =
-      Enum.each(user_filters, fn
-        {_key, none} when none in ["", nil] ->
-          false
+    # Compare only if:
+    # - key in flat_filters exist
+    # - value that key points on in user_filters is not empty
 
-        {key, _value} ->
-          Map.has_key?(flat_filters, String.to_existing_atom(key))
-      end)
+    # support a case for price
+    key_exists_and_has_value =
+      for {key, value} when value not in ["", nil] <- user_filters do
+        case key do
+          "max_price" ->
+            Map.has_key?(flat_filters, :price) and Map.has_key?(flat_filters, :additional_price)
 
-    case key_exists_and_has_value? do
+          key ->
+            Map.has_key?(flat_filters, String.to_existing_atom(key))
+        end
+      end
+
+    case check_lsit_truthy(key_exists_and_has_value) do
       false ->
         false
 
-      # compare value case insensitive
       true ->
-        Enum.each(user_filters, fn
-          {key, value} ->
-            flat_filters.(String.to_existing_atom(key)) == value
-        end)
+        for {key, value} when value not in ["", nil] <- user_filters do
+          case key do
+            "max_price" ->
+              String.to_integer(value) >= flat_filters.price + flat_filters.additional_price
+
+            _ ->
+              insensitive_string(flat_filters[String.to_existing_atom(key)]) ==
+                insensitive_string(value)
+          end
+        end
+        |> check_lsit_truthy()
+    end
+  end
+
+  defp check_lsit_truthy(list) do
+    cond do
+      false in list ->
+        false
+
+      false not in list ->
+        true
+        # not a list case
     end
   end
 
@@ -53,21 +91,5 @@ defmodule FlatSearchWeb.PageLive do
     value
     |> String.downcase()
     |> (&:iconv.convert("utf-8", "ascii//translit", &1)).()
-  end
-
-  @impl true
-  def handle_info({:error, msg}, socket) do
-    {:noreply, assign(socket, error: msg)}
-  end
-
-  @impl true
-  def handle_event("search", %{"filter" => params}, socket) do
-    changeset =
-      %Filter{}
-      |> Filters.change_filter(params)
-      |> Map.put(:action, :insert)
-
-    {:noreply,
-     assign(socket, changeset: changeset, flats: Flats.get_flats_by(params), filters: params)}
   end
 end

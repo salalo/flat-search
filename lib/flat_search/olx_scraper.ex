@@ -1,5 +1,5 @@
 defmodule FlatSearch.OlxScraper do
-  alias FlatSearch.{Flats, Flats.Flat}
+  alias FlatSearch.Flats
 
   @base_query_url "https://www.olx.pl"
   @query_url "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/"
