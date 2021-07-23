@@ -57,7 +57,7 @@ defmodule FlatSearchWeb.PageLive do
         end
       end
 
-    case check_lsit_truthy(key_exists_and_has_value) do
+    case check_list_truthy(key_exists_and_has_value) do
       false ->
         false
 
@@ -72,11 +72,11 @@ defmodule FlatSearchWeb.PageLive do
                 insensitive_string(value)
           end
         end
-        |> check_lsit_truthy()
+        |> check_list_truthy()
     end
   end
 
-  defp check_lsit_truthy(list) do
+  defp check_list_truthy(list) do
     cond do
       false in list ->
         false

@@ -36,14 +36,14 @@ defmodule FlatSearch.Flats.Flat do
       :link,
       :photo_links
     ])
-    |> put_link_hash()
+    |> put_title_hash()
     |> unique_constraint(:unique_id)
   end
 
-  defp put_link_hash(changeset) do
+  defp put_title_hash(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{link: link}} ->
-        put_change(changeset, :unique_id, :md5 |> :crypto.hash(link) |> Base.encode16())
+      %Ecto.Changeset{valid?: true, changes: %{title: title}} ->
+        put_change(changeset, :unique_id, :md5 |> :crypto.hash(title) |> Base.encode16())
 
       _ ->
         changeset

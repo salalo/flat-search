@@ -28,7 +28,7 @@ config :phoenix, :json_library, Jason
 
 config :flat_search, FlatSearch.Scheduler,
   jobs: [
-    {"* * * * *", {FlatSearch.OlxScraper, :run, []}}
+    {"*/5 * * * *", {FlatSearch.OlxScraper, :run, []}}
   ]
 
 # Import environment specific config. This must remain at the bottom

@@ -22,5 +22,7 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
 
       timestamps()
     end
+
+    create unique_index(:flats, :unique_id)
   end
 end
