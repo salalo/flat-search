@@ -24,8 +24,6 @@ defmodule FlatSearchWeb.PageLive do
 
   @impl true
   def handle_info({:flat_created, flat}, socket) do
-    insensitive_string("Warszawą Dąbrowa")
-
     case flat_fulfills_filters?(socket.assigns.filters, flat) do
       true ->
         {:noreply, assign(socket, flats: [flat] ++ socket.assigns.flats)}
