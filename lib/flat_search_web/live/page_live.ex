@@ -76,16 +76,7 @@ defmodule FlatSearchWeb.PageLive do
     end
   end
 
-  defp check_list_truthy(list) do
-    cond do
-      false in list ->
-        false
-
-      false not in list ->
-        true
-        # not a list case
-    end
-  end
+  defp check_list_truthy(list), do: false not in list
 
   defp insensitive_string(value) do
     value
