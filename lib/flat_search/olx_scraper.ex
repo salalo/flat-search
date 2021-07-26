@@ -162,8 +162,7 @@ defmodule FlatSearch.OlxScraper do
     |> Enum.at(0)
   end
 
-  defp insensitive_string(nil), do: ""
-  defp insensitive_string(""), do: ""
+  defp insensitive_string(string) when string in [nil, ""], do: ""
 
   defp insensitive_string(value) do
     value

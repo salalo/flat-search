@@ -78,8 +78,7 @@ defmodule FlatSearchWeb.PageLive do
 
   defp check_list_truthy(list), do: false not in list
 
-  defp insensitive_string(nil), do: ""
-  defp insensitive_string(""), do: ""
+  defp insensitive_string(string) when string in [nil, ""], do: ""
 
   defp insensitive_string(value) do
     value
