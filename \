@@ -41,7 +41,7 @@ defmodule FlatSearchWeb.PageLive do
   end
 
   defp flat_fulfills_filters?(user_filters, flat_filters) do
-    case check_list_truthy(key_exists_and_has_value(user_filters, flat_filters)) do
+    case false not in key_exists_and_has_value(user_filters, flat_filters) do
       false ->
         false
 
