@@ -153,7 +153,9 @@ defmodule FlatSearch.OlxScraper do
     end
   end
 
-  defp get_nested_element(enum) when enum != [] do
+  defp get_nested_element([]), do: ""
+
+  defp get_nested_element(enum) do
     enum
     |> Enum.at(0)
     |> elem(2)
