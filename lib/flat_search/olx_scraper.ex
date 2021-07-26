@@ -65,9 +65,9 @@ defmodule FlatSearch.OlxScraper do
       surface: get_surface(document),
       photo_links: get_photo_links(document),
       link: url,
-      region: document |> get_localization() |> Enum.at(0) |> insensitive_string(),
-      city: document |> get_localization() |> Enum.at(1) |> insensitive_string(),
-      district: document |> get_localization() |> Enum.at(2) |> insensitive_string()
+      region: manage_location_data(document, 0),
+      city: manage_location_data(document, 1),
+      district: manage_location_data(document, 2)
     }
 
     Flats.create_flat(flat_record)
@@ -169,4 +169,7 @@ defmodule FlatSearch.OlxScraper do
     |> (&:iconv.convert("utf-8", "ascii//translit", &1)).()
     |> String.replace("'", "")
   end
+
+  defp manage_location_data(document, depth),
+    do: document |> get_localization() |> Enum.at(depth) |> insensitive_string()
 end
