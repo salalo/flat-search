@@ -8,7 +8,7 @@ defmodule FlatSearchWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: PubSub.subscribe()
-    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: []})}
+    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: [], filters: []})}
   end
 
   @impl true
@@ -66,7 +66,7 @@ defmodule FlatSearchWeb.PageLive do
               String.to_integer(value) >= flat_filters.price + flat_filters.additional_price
 
             _ ->
-              insensitive_string(flat_filters[String.to_existing_atom(key)]) ==
+              insensitive_string(Map.get(flat_filters, String.to_existing_atom(key))) ==
                 insensitive_string(value)
           end
         end
@@ -75,6 +75,8 @@ defmodule FlatSearchWeb.PageLive do
   end
 
   defp check_list_truthy(list), do: false not in list
+
+  defp insensitive_string(nil), do: ""
 
   defp insensitive_string(value) do
     value
