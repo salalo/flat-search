@@ -29,18 +29,18 @@ defmodule FlatSearch.Flats do
 
   def get_flats_by(params) do
     params
-    |> Enum.reduce(Flat, fn
-      {_field, none}, query when none in ["", nil] ->
-        query
-
-      {"max_price", max_price}, query ->
-        from q in query, where: q.price + q.additional_price <= ^String.to_integer(max_price)
-
-      {field, value}, query ->
-        where(query, ^[{String.to_existing_atom(field), value}])
-    end)
+    |> Enum.reduce(Flat, &generate_query(&1, &2))
     |> Repo.all()
   end
+
+  defp generate_query({_, none}, query) when none in ["", nil],
+    do: query
+
+  defp generate_query({"max_price", max_price}, query),
+    do: from(q in query, where: q.price + q.additional_price <= ^String.to_integer(max_price))
+
+  defp generate_query({field, value}, query),
+    do: where(query, ^[{String.to_existing_atom(field), value}])
 
   def create_flat(attrs \\ %{}) do
     %Flat{}
