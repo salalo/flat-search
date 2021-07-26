@@ -2,6 +2,8 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
   use Ecto.Migration
 
   def change do
+    execute "CREATE EXTENSION citext", "DROP EXTENSION citext"
+
     create table("flats") do
       add :unique_id, :string
       add :title, :string
@@ -14,8 +16,13 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
       add :favourite, :boolean
       add :state, :string
       add :photo_links, {:array, :string}
+      add :region, :citext
+      add :city, :citext
+      add :district, :citext
 
       timestamps()
     end
+
+    create unique_index(:flats, :unique_id)
   end
 end

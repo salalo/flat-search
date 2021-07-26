@@ -34,7 +34,6 @@ defmodule FlatSearch.OlxScraper do
   end
 
   defp get_range_of_pages(document) do
-    # Gets number of pages
     document
     |> Floki.find("[data-cy=page-link-last]")
     |> Enum.at(0)
@@ -65,10 +64,22 @@ defmodule FlatSearch.OlxScraper do
       negotiation: negotiable?(document),
       surface: get_surface(document),
       photo_links: get_photo_links(document),
-      link: url
+      link: url,
+      region: manage_location_data(document, 0),
+      city: manage_location_data(document, 1),
+      district: manage_location_data(document, 2)
     }
 
     Flats.create_flat(flat_record)
+  end
+
+  @spec get_localization(document :: HTML) :: [String.t() | nil, ...]
+  defp get_localization(document) do
+    document
+    |> Floki.find("[data-testid=breadcrumb-item] a:fl-contains('Wynajem - ')")
+    |> Floki.text()
+    |> String.split("Wynajem - ")
+    |> tl()
   end
 
   defp get_title(document) do
@@ -142,10 +153,24 @@ defmodule FlatSearch.OlxScraper do
     end
   end
 
+  defp get_nested_element([]), do: ""
+
   defp get_nested_element(enum) do
     enum
     |> Enum.at(0)
     |> elem(2)
     |> Enum.at(0)
   end
+
+  defp insensitive_string(string) when string in [nil, ""], do: ""
+
+  defp insensitive_string(value) do
+    value
+    |> String.downcase()
+    |> (&:iconv.convert("utf-8", "ascii//translit", &1)).()
+    |> String.replace("'", "")
+  end
+
+  defp manage_location_data(document, depth),
+    do: document |> get_localization() |> Enum.at(depth) |> insensitive_string()
 end
