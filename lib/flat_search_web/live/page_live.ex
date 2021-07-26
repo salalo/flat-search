@@ -18,6 +18,8 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
+    params = Enum.map(params, fn {key, value} -> {key, insensitive_string(value)} end)
+
     {:noreply,
      assign(socket, changeset: changeset, flats: Flats.get_flats_by(params), filters: params)}
   end
@@ -77,10 +79,12 @@ defmodule FlatSearchWeb.PageLive do
   defp check_list_truthy(list), do: false not in list
 
   defp insensitive_string(nil), do: ""
+  defp insensitive_string(""), do: ""
 
   defp insensitive_string(value) do
     value
     |> String.downcase()
     |> (&:iconv.convert("utf-8", "ascii//translit", &1)).()
+    |> String.replace("'", "")
   end
 end
