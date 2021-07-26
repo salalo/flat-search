@@ -31,7 +31,7 @@ defmodule FlatSearchWeb.PageLive do
         {:noreply, assign(socket, flats: [flat] ++ socket.assigns.flats)}
 
       false ->
-        {:noreply, assign(socket, flats: socket.assigns.flats)}
+        {:noreply, socket}
     end
   end
 
