@@ -10,11 +10,21 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :flat_search, FlatSearchWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [host: "long-meek-chital.gigalixirapp.com", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :flat_search, FlatSearch.Repo,
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  database: System.get_env("DB_DATABASE"),
+  url: System.get_env("DB_URL"),
+  port: System.get_env("DB_PORT"),
+  pool_size: System.get_env("DB_POOL_SIZE"),
+  show_sensitive_data_on_connection_error: true
 
 # ## SSL Support
 #

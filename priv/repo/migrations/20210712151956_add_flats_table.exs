@@ -2,7 +2,7 @@ defmodule FlatSearch.Repo.Migrations.AddFlatsTable do
   use Ecto.Migration
 
   def change do
-    execute "CREATE EXTENSION citext", "DROP EXTENSION citext"
+    execute "CREATE EXTENSION IF NOT EXISTS citext", "DROP EXTENSION citext"
 
     create table("flats") do
       add :unique_id, :string

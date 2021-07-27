@@ -12,7 +12,8 @@ config :flat_search,
 
 # Configures the endpoint
 config :flat_search, FlatSearchWeb.Endpoint,
-  url: [host: "localhost"],
+  # url: [host: "localhost"],
+  url: [host: "long-meek-chitall.gigalixirapp.com"],
   secret_key_base: "obKqEiH/GP7H+VX8NdcSJ4rVqR+bvxE0PkaW88cmZs+kWpo1Z0QDzJG9Af/hj/HY",
   render_errors: [view: FlatSearchWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: FlatSearch.PubSub,
@@ -28,7 +29,7 @@ config :phoenix, :json_library, Jason
 
 config :flat_search, FlatSearch.Scheduler,
   jobs: [
-    {"*/30 * * * *", {FlatSearch.OlxScraper, :run, []}}
+    {"*/10 * * * *", {FlatSearch.OlxScraper, :run, []}}
   ]
 
 # Import environment specific config. This must remain at the bottom
