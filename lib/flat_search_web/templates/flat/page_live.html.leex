@@ -1,5 +1,5 @@
 <%= Gettext.with_locale(@locale, fn -> %>
 	<%= render("_search.html", assigns) %>
-	<p class="mb-4 text-gray-500"><%= length(@flats) %> flats found</p>
+	<p class="mb-4 text-gray-500"><%= length(@flats) %> <%= gettext "znalezionych mieszkań" %></p>
 	<%= render("_flat_record.html", assigns) %>
 <% end) %>

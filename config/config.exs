@@ -14,7 +14,7 @@ config :flat_search,
 config :flat_search, FlatSearchWeb.Endpoint,
   # url: [host: "localhost"],
   url: [host: "long-meek-chitall.gigalixirapp.com"],
-  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  secret_key_base: "obKqEiH/GP7H+VX8NdcSJ4rVqR+bvxE0PkaW88cmZs+kWpo1Z0QDzJG9Af/hj/HY",
   render_errors: [view: FlatSearchWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: FlatSearch.PubSub,
   live_view: [signing_salt: "5mQ4Wuge"]

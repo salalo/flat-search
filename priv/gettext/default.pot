@@ -11,6 +11,51 @@ msgid ""
 msgstr ""
 
 #, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:28
+msgid "Cena maksymalna"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "Do negocjacji:"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:21
+msgid "Dzielnica"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:1
+msgid "Jakiego mieszkania szukasz?"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:14
+msgid "Miasto"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "NIE"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:15
+msgid "Powierzchnia:"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "TAK"
+msgstr ""
+
+#, elixir-format
 #: lib/flat_search_web/templates/flat/_search.html.leex:7
 msgid "Województwo"
+msgstr ""
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/page_live.html.leex:3
+msgid "znalezionych mieszkań"
 msgstr ""
