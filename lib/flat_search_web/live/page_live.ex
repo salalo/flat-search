@@ -8,7 +8,13 @@ defmodule FlatSearchWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: PubSub.subscribe()
-    {:ok, assign(socket, %{changeset: Filter.changeset(%Filter{}, %{}), flats: [], filters: []})}
+
+    {:ok,
+     assign(socket, %{
+       changeset: Filter.changeset(%Filter{}, %{}),
+       flats: [],
+       filters: []
+     })}
   end
 
   @impl true
@@ -18,10 +24,14 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
-    params = Enum.map(params, fn {key, value} -> {key, insensitive_string(value)} end)
+      ic_params = Enum.map(params, fn {key, value} -> {key, insensitive_string(value)} end)
 
     {:noreply,
-     assign(socket, changeset: changeset, flats: Flats.get_flats_by(params), filters: params)}
+     assign(socket,
+       changeset: changeset,
+       flats: Flats.get_flats_by(ic_params, params["order_by"]),
+       filters: ic_params
+     )}
   end
 
   @impl true
@@ -49,7 +59,7 @@ defmodule FlatSearchWeb.PageLive do
         for {key, value} when value not in ["", nil] <- user_filters do
           case key do
             "max_price" ->
-              String.to_integer(value) >= flat_filters.price + flat_filters.additional_price
+              String.to_integer(value) >= flat_filters[:price] + flat_filters[:additional_price]
 
             _ ->
               insensitive_string(Map.get(flat_filters, String.to_existing_atom(key))) ==
