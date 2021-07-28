@@ -4,6 +4,7 @@
   <%= f = form_for(@changeset, "#", phx_change: :search) %>
     <div class="flex flex-row">
       <div>
+      <h2><%= gettext "Województwo" %></h2>
         <%= text_input f, :region, placeholder: "Region", phx_debounce: "1000" %>
         <p class="mt-5">
           <%= error_tag f, :region %>

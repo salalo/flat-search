@@ -6,14 +6,20 @@ defmodule FlatSearchWeb.PageLive do
   def render(assigns), do: FlatSearchWeb.FlatView.render("page_live.html", assigns)
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket), do: PubSub.subscribe()
+
+    locale = case session do
+      %{"locale" => locale} -> locale
+      _ -> "pl"
+    end
 
     {:ok,
      assign(socket, %{
        changeset: Filter.changeset(%Filter{}, %{}),
        flats: [],
-       filters: []
+       filters: [],
+       locale: locale
      })}
   end
 

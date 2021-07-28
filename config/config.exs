@@ -14,7 +14,7 @@ config :flat_search,
 config :flat_search, FlatSearchWeb.Endpoint,
   # url: [host: "localhost"],
   url: [host: "long-meek-chitall.gigalixirapp.com"],
-  secret_key_base: "obKqEiH/GP7H+VX8NdcSJ4rVqR+bvxE0PkaW88cmZs+kWpo1Z0QDzJG9Af/hj/HY",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: FlatSearchWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: FlatSearch.PubSub,
   live_view: [signing_salt: "5mQ4Wuge"]
@@ -29,8 +29,12 @@ config :phoenix, :json_library, Jason
 
 config :flat_search, FlatSearch.Scheduler,
   jobs: [
-    {"*/10 * * * *", {FlatSearch.OlxScraper, :run, []}}
+    {"*/20 * * * *", {FlatSearch.OlxScraper, :run, []}}
   ]
+
+config :flat_search, FlatSearchWeb.Gettext,
+  default_locale: "pl",
+  locales: ~w(pl en)
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
