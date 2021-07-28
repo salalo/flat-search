@@ -36,9 +36,7 @@ defmodule FlatSearch.OlxScraper do
   defp get_range_of_pages(document) do
     document
     |> Floki.find("[data-cy=page-link-last]")
-    |> Enum.at(0)
-    |> elem(2)
-    |> Enum.at(0)
+    |> get_nested_element()
     |> elem(2)
     |> Enum.at(0)
     |> str_to_num()
