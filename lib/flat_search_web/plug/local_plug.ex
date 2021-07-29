@@ -4,19 +4,15 @@ defmodule FlatSearchWeb.Plugs.Locale do
   def init(_opts), do: nil
 
   def call(conn, _opts) do
-    accepted_languages = extract_accept_language(conn)
     known_locales = Gettext.known_locales(FlatSearchWeb.Gettext)
 
-    accepted_languages =
-      known_locales --
-        (known_locales -- accepted_languages)
+    accepted_locales =
+      Enum.filter(known_locales, fn locale -> locale in extract_accept_language(conn) end)
 
-    case accepted_languages do
+    case accepted_locales do
       [locale | _] ->
         Gettext.put_locale(FlatSearchWeb.Gettext, locale)
-
-        conn
-        |> put_session(:locale, locale)
+        put_session(conn, :locale, locale)
 
       _ ->
         conn

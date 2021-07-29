@@ -9,17 +9,12 @@ defmodule FlatSearchWeb.PageLive do
   def mount(_params, session, socket) do
     if connected?(socket), do: PubSub.subscribe()
 
-    locale = case session do
-      %{"locale" => locale} -> locale
-      _ -> "pl"
-    end
-
     {:ok,
      assign(socket, %{
        changeset: Filter.changeset(%Filter{}, %{}),
        flats: [],
        filters: [],
-       locale: locale
+       locale: Map.get(session, "locale", "pl")
      })}
   end
 
