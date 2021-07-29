@@ -30,13 +30,17 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
-      ic_params = Enum.map(params, fn {key, value} -> {key, insensitive_string(value)} end)
+    params = Map.new(params, fn {key, value} -> {key, insensitive_string(value)} end)
 
     {:noreply,
      assign(socket,
        changeset: changeset,
-       flats: Flats.get_flats_by(ic_params, params["order_by"]),
-       filters: ic_params
+       flats:
+         Flats.get_flats_by(
+           params,
+           params["order_by"]
+         ),
+       filters: params
      )}
   end
 
@@ -65,10 +69,10 @@ defmodule FlatSearchWeb.PageLive do
         for {key, value} when value not in ["", nil] <- user_filters do
           case key do
             "max_price" ->
-              String.to_integer(value) >= flat_filters[:price] + flat_filters[:additional_price]
+              String.to_integer(value) >= flat_filters["price"] + flat_filters["additional_price"]
 
             _ ->
-              insensitive_string(Map.get(flat_filters, String.to_existing_atom(key))) ==
+              insensitive_string(flat_filters[key]) ==
                 insensitive_string(value)
           end
         end
@@ -82,10 +86,10 @@ defmodule FlatSearchWeb.PageLive do
     |> Enum.reject(fn {_key, value} -> value in ["", nil] end)
     |> Enum.map(fn
       {"max_price", _value} ->
-        Map.has_key?(flat_filters, :price) and Map.has_key?(flat_filters, :additional_price)
+        Map.has_key?(flat_filters, "price") and Map.has_key?(flat_filters, "additional_price")
 
       {key, _value} ->
-        Map.has_key?(flat_filters, String.to_existing_atom(key))
+        Map.has_key?(flat_filters, key)
     end)
   end
 
