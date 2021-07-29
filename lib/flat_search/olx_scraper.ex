@@ -57,6 +57,7 @@ defmodule FlatSearch.OlxScraper do
     flat_record = %{
       price: get_price(document),
       additional_price: get_additional_price(document),
+      full_price: get_price(document) + get_additional_price(document),
       title: get_title(document),
       # description: get_description(document),
       negotiation: negotiable?(document),

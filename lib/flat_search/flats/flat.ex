@@ -5,7 +5,7 @@ defmodule FlatSearch.Flats.Flat do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @default_params ~w(title price link additional_price negotiation surface description photo_links region city district)a
+  @default_params ~w(title price link additional_price negotiation surface description photo_links region city district full_price)a
 
   schema "flats" do
     field :unique_id, :string
@@ -13,6 +13,7 @@ defmodule FlatSearch.Flats.Flat do
     field :link, :string
     field :price, :integer
     field :additional_price, :integer
+    field :full_price, :integer
     field :negotiation, :boolean, default: false
     field :surface, :integer
     field :description, {:array, :string}
