@@ -24,12 +24,14 @@ defmodule FlatSearchWeb.PageLive do
       |> Filters.change_filter(params)
       |> Map.put(:action, :insert)
 
+    params = Map.new(params, fn {key, value} -> {key, insensitive_string(value)} end)
+
     {:noreply,
      assign(socket,
        changeset: changeset,
        flats:
          Flats.get_flats_by(
-           Enum.map(params, fn {key, value} -> {key, insensitive_string(value)} end),
+           params,
            params["order_by"]
          ),
        filters: params
