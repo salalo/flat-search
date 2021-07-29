@@ -8,7 +8,13 @@
       </p>
 
       <p>
-        <%= gettext "Do negocjacji:" %> <b><%= if flat.negotiation, do: gettext "TAK" , else: gettext "NIE" %></b><br>
+        <%= gettext "Do negocjacji:" %>
+          <%= if flat.negotiation do %>
+            <b><%= gettext "TAK" %> </b>
+            <% else %>
+              <b><%= gettext "NIE" %> </b>
+          <% end %>
+        <br>
       </p>
 
       <p>
