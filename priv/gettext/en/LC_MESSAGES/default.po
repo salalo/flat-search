@@ -1,0 +1,62 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:28
+msgid "Cena maksymalna"
+msgstr "Max price"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "Do negocjacji:"
+msgstr "To negotiate:"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:21
+msgid "Dzielnica"
+msgstr "District"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:1
+msgid "Jakiego mieszkania szukasz?"
+msgstr "What are you looking for?"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:14
+msgid "Miasto"
+msgstr "City"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "NIE"
+msgstr "NO"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:15
+msgid "Powierzchnia:"
+msgstr "Surface:"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_flat_record.html.leex:11
+msgid "TAK"
+msgstr "YES"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/_search.html.leex:7
+msgid "Województwo"
+msgstr "Region"
+
+#, elixir-format
+#: lib/flat_search_web/templates/flat/page_live.html.leex:3
+msgid "znalezionych mieszkań"
+msgstr "flats found"

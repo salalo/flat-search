@@ -8,6 +8,7 @@ defmodule FlatSearchWeb.Router do
     plug :put_root_layout, {FlatSearchWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug FlatSearchWeb.Plugs.Locale
   end
 
   pipeline :api do

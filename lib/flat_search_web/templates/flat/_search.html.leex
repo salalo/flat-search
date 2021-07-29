@@ -1,38 +1,39 @@
-<h1 class="mb-12 text-6xl antialiased">What are you looking for?</h1>
+<h1 class="mb-12 text-6xl antialiased"><%= gettext "Jakiego mieszkania szukasz?" %></h1>
 
 <div class="flex flex-row justify-between text-gray-500">
   <%= f = form_for(@changeset, "#", phx_change: :search) %>
     <div class="flex flex-row">
       <div>
-        <%= text_input f, :region, placeholder: "Region", phx_debounce: "1000" %>
+        <%= text_input f, :region, placeholder: gettext "Województwo", phx_debounce: "1000" %>
         <p class="mt-5">
           <%= error_tag f, :region %>
         </p>
       </div>
 
       <div class="mx-5">
-        <%= text_input f, :city, placeholder: "City", phx_debounce: "1000" %>
+        <%= text_input f, :city, placeholder: gettext "Miasto", phx_debounce: "1000" %>
         <p class="mt-5">
           <%= error_tag f, :city %>
         </p>
       </div>
 
       <div>
-        <%= text_input f, :district, placeholder: "District", phx_debounce: "1000" %>
+        <%= text_input f, :district, placeholder: gettext "Dzielnica", phx_debounce: "1000" %>
         <p class="mt-5">
           <%= error_tag f, :district %>
         </p>
       </div>
 
       <div class="mx-5">
-        <%= text_input f, :max_price, placeholder: "Max price", phx_debounce: "1000" %>
+        <%= text_input f, :max_price, placeholder: gettext "Cena maksymalna", phx_debounce: "1000" %>
         <p class="mt-5">
           <%= error_tag f, :max_price %>
         </p>
       </div>
 
       <div>
-        <% options = ["Order by": "", "Surface": "surface_asc", "Surface (Desc)": "surface_desc",
+      <%# not translating on purpose %>
+        <% options = ["Sort": "", "Surface": "surface_asc", "Surface (Desc)": "surface_desc",
                       "Price": "price_asc", "Price (Desc)": "price_desc"] %>
         <%= select f, :order_by, options %>
         <p class="mt-5">
